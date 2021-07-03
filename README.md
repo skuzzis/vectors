@@ -1,7 +1,7 @@
 # SA:MP Vectors
 
-| Releases                                                                                                                   | Master                                                                                                                                  |
-|-----------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|
+| Releases | Master |
+|----------|--------|
 | [![Download](https://static.kxnrl.com/images/web/buttons/download.png)](https://github.com/skuzzis/pawn-vectors/releases/) | [![Download](https://static.kxnrl.com/images/web/buttons/download.png)](https://github.com/skuzzis/pawn-vectors/archive/refs/heads/master.zip) |
 
 ## Useful Links
