@@ -1,8 +1,8 @@
 # SA:MP Vectors
 
-| Travis CI                                                                                                                   | Releases                                                                                                                   | Master                                                                                                                                  |
+| Releases                                                                                                                   | Master                                                                                                                                  |
 |-----------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|
-| [![Build Status](https://travis-ci.com/skuzzis/pawn-vectors.svg?branch=master)](https://travis-ci.com/skuzzis/pawn-vectors) | [![Download](https://static.kxnrl.com/images/web/buttons/download.png)](https://github.com/skuzzis/pawn-vectors/releases/) | [![Download](https://static.kxnrl.com/images/web/buttons/download.png)](https://github.com/skuzzis/pawn-vectors/archive/refs/heads/master.zip) |
+| [![Download](https://static.kxnrl.com/images/web/buttons/download.png)](https://github.com/skuzzis/pawn-vectors/releases/) | [![Download](https://static.kxnrl.com/images/web/buttons/download.png)](https://github.com/skuzzis/pawn-vectors/archive/refs/heads/master.zip) |
 
 ## Useful Links
 
