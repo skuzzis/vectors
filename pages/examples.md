@@ -172,7 +172,7 @@ new success = Vector_Delete(vector1, 0);
 
 ## Vector_Replace
 
-It replaces the given value to the new value. (**WARNING** If the old value isn't valid, it returns 0)
+It replaces the given value to the new value. (**WARNING** If the old value isn't valid, it returns -1)
 
 ```pawn
 new success = Vector_Replace(vector1, 0, 125);
@@ -186,14 +186,6 @@ It replaces the given value to the specific index. (**WARNING** If the index isn
 new success = Vector_ReplaceIndex(vector1, 0, 125);
 ```
 
-## Vector_Insert
-
-It inserts the specific value at the given index.
-
-```pawn
-new success = Vector_Insert(vector1, 0, 125);
-```
-
 ## Vector_Clear
 
 It clears the vector.
@@ -204,6 +196,6 @@ new success = Vector_Clear(vector1);
 
 ## External Links
 
-[Quick-Start](https://github.com/skuzzis/pawn-vectors/blob/master/pages/quick_start.md) - Quick-Start for SA:MP Vectors.
+[Quick-Start](https://github.com/skuzzis/vectors/blob/master/pages/quick_start.md) - Quick-Start for SA:MP Vectors.
 
-[Functions List](https://github.com/skuzzis/pawn-vectors/blob/master/pages/natives_list.md) - A list of functions for SA:MP Vectors.
+[Functions List](https://github.com/skuzzis/vectors/blob/master/pages/natives_list.md) - A list of functions for SA:MP Vectors.
