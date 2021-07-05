@@ -1,4 +1,4 @@
-# SA:MP Vectors
+# Vectors
 
 | Releases | Master |
 |----------|--------|
