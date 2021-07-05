@@ -6,11 +6,11 @@
 
 ## Useful Links
 
-[Functions List](https://github.com/skuzzis/pawn-vectors/blob/master/pages/natives_list.md) - A list of functions for SA:MP Vectors.
+[Functions List](https://github.com/skuzzis/vectors/blob/master/pages/natives_list.md) - A list of functions for SA:MP Vectors.
 
-[Examples](https://github.com/skuzzis/pawn-vectors/blob/master/pages/examples.md) - A list of examples for SA:MP Vectors.
+[Examples](https://github.com/skuzzis/vectors/blob/master/pages/examples.md) - A list of examples for SA:MP Vectors.
 
-[Quick-Start](https://github.com/skuzzis/pawn-vectors/blob/master/pages/quick_start.md) - Quick-Start for SA:MP Vectors.
+[Quick-Start](https://github.com/skuzzis/vectors/blob/master/pages/quick_start.md) - Quick-Start for SA:MP Vectors.
 
 ## Why SA:MP Vectors and what is it?
 
