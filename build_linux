@@ -1,0 +1,6 @@
+clear
+
+rm -f *.o *.so
+g++ -D VECTORS -m32 -fPIC -c -O3 -w -D LINUX -D PROJECT_NAME=\"vectors\" -I ./SDK/ ./SDK/*.cpp -std=c++11
+g++ -D VECTORS -m32 -fPIC -c -O3 -w -D LINUX -D PROJECT_NAME=\"vectors\" -I ./SDK/ *.cpp -std=c++11
+g++ -m32 -O2 -fshort-wchar -shared -o vectors.so *.o -std=c++11
