@@ -2,13 +2,13 @@
 
 ## How I install the plugin?
 
-To get started, you need to download the [Latest Releases](https://github.com/skuzzis/pawn-vectors/releases) and put these two folders inside your server.
+To get started, you need to download the [Latest Releases](https://github.com/skuzzis/vectors/releases) and put these two folders inside your server.
 
 Next in your gamemode, you need to include the file like this:
 
 ```pawn
 #include <a_samp>
-#include <samp-vectors>
+#include <vectors>
 ...
 ```
 
@@ -30,12 +30,12 @@ public OnGameModeInit() {
 
 ## How do I use the vectors?
 
-You can use the vectors with the list of functions which are [here](https://github.com/skuzzis/pawn-vectors/blob/master/pages/natives_list.md).
+You can use the vectors with the list of functions which are [here](https://github.com/skuzzis/vectors/blob/master/pages/natives_list.md).
 
-Also, you can get some examples from [here](https://github.com/skuzzis/pawn-vectors/blob/master/pages/examples.md).
+Also, you can get some examples from [here](https://github.com/skuzzis/vectors/blob/master/pages/examples.md).
 
 ## External links
 
-[Functions List](https://github.com/skuzzis/pawn-vectors/blob/master/pages/natives_list.md) - A list of functions for SA:MP Vectors.
+[Functions List](https://github.com/skuzzis/vectors/blob/master/pages/natives_list.md) - A list of functions for Vectors.
 
-[Examples](https://github.com/skuzzis/pawn-vectors/blob/master/pages/examples.md) - A list of examples for SA:MP Vectors.
+[Examples](https://github.com/skuzzis/vectors/blob/master/pages/examples.md) - A list of examples for Vectors.
