@@ -196,6 +196,6 @@ new success = Vector_Clear(vector1);
 
 ## External Links
 
-[Quick-Start](https://github.com/skuzzis/vectors/blob/master/pages/quick_start.md) - Quick-Start for SA:MP Vectors.
+[Quick-Start](https://github.com/skuzzis/vectors/blob/master/pages/quick_start.md) - Quick-Start for Vectors.
 
-[Functions List](https://github.com/skuzzis/vectors/blob/master/pages/natives_list.md) - A list of functions for SA:MP Vectors.
+[Functions List](https://github.com/skuzzis/vectors/blob/master/pages/natives_list.md) - A list of functions for Vectors.
