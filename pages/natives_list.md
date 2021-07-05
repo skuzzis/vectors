@@ -27,12 +27,11 @@ native Vector_Remove(Vector:vector_name, value);
 native Vector_Delete(Vector:vector_name, index);
 native Vector_Replace(Vector:vector_name, old_value, new_value);
 native Vector_ReplaceIndex(Vector:vector_name, index, new_value);
-native Vector_Insert(Vector:vector_name, index, value);
 native Vector_Clear(Vector:vector_name);
 ```
 
 ## External links
 
-[Quick-Start](https://github.com/skuzzis/pawn-vectors/blob/master/pages/quick_start.md) - Quick-Start for SA:MP Vectors.
+[Quick-Start](https://github.com/skuzzis/vectors/blob/master/pages/quick_start.md) - Quick-Start for SA:MP Vectors.
 
-[Examples](https://github.com/skuzzis/pawn-vectors/blob/master/pages/examples.md) - A list of examples for SA:MP Vectors.
+[Examples](https://github.com/skuzzis/vectors/blob/master/pages/examples.md) - A list of examples for SA:MP Vectors.
