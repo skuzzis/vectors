@@ -25,19 +25,21 @@
 #include <cstddef>
 #include <unordered_set>
 #include <vector>
-#include <time.h>
+#include <cassert>
 
 #include "SDK/amx/amx.h"
 #include "SDK/plugincommon.h"
 #include "pluginconfig.h"
 #include "pluginutils.h"
 
+
 extern void* pAMXFunctions;
 void* (*logprintf)(const char* fmt, ...);
 
 bool debugging = false;
-unsigned long int vectorID = 0;
+unsigned long int vctID = 0;
 std::vector<std::unordered_set<int>> vectors;
+std::vector<std::vector<int>> copy_vectors;
 
 /// <summary>
 /// Creating the vector
@@ -49,10 +51,12 @@ std::vector<std::unordered_set<int>> vectors;
 static cell AMX_NATIVE_CALL n_Vector_Create(AMX* amx, cell* params)
 {
 	std::unordered_set<int> unordered_setts;
+	std::vector<int> copy_unordered_setts;
 	vectors.push_back(unordered_setts);
+	copy_vectors.push_back(copy_unordered_setts);
 
-	if(debugging) logprintf("%s: A new vector has been created with ID: %d.", pluginutils::GetCurrentNativeFunctionName(amx), vectorID + 1);
-	return static_cast<cell>(++vectorID);
+	if(debugging) logprintf("%s: A new vector has been created with ID: %d.", pluginutils::GetCurrentNativeFunctionName(amx), vctID + 1);
+	return static_cast<cell>(++vctID);
 }
 
 /// <summary>
@@ -86,11 +90,12 @@ static cell AMX_NATIVE_CALL n_Vector_Size(AMX* amx, cell* params)
 	unsigned short int num_args = 1;
 	if (!pluginutils::CheckNumberOfArguments(amx, params, num_args))
 		return 0;
-	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vectorID)
+	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vctID)
 		return -1;
 
-	if (debugging) logprintf("%s: Returning the size of vector %d as %d.", pluginutils::GetCurrentNativeFunctionName(amx), static_cast<int>(params[1]), vectors[static_cast<int>(params[1]) - 1].size());
-	return vectors[static_cast<int>(params[1]) - 1].size();
+	auto size = vectors[static_cast<unsigned long int>(params[1]) - 1].size();
+	if (debugging) logprintf("%s: Returning the size of vector %d as %d.", pluginutils::GetCurrentNativeFunctionName(amx), static_cast<int>(params[1]), size);
+	return size;
 }
 
 /// <summary>
@@ -105,11 +110,12 @@ static cell AMX_NATIVE_CALL n_Vector_Odd(AMX* amx, cell* params)
 	unsigned short int num_args = 1;
 	if (!pluginutils::CheckNumberOfArguments(amx, params, num_args))
 		return 0;
-	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vectorID)
+	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vctID)
 		return -1;
 
-	if (debugging) logprintf("%s: The size of vector %d is %d, and the return will be %s.", pluginutils::GetCurrentNativeFunctionName(amx), static_cast<int>(params[1]), vectors[static_cast<int>(params[1]) - 1].size(), vectors[static_cast<int>(params[1]) - 1].size() % 2 == 1 ? "true" : "false");
-	return vectors[static_cast<int>(params[1]) - 1].size() % 2 == 1;
+	auto size = vectors[static_cast<unsigned long int>(params[1]) - 1].size();
+	if (debugging) logprintf("%s: The size of vector %d is %d, and the return will be %s.", pluginutils::GetCurrentNativeFunctionName(amx), static_cast<int>(params[1]), size, size % 2 == 1 ? "true" : "false");
+	return size % 2 == 1;
 }
 
 /// <summary>
@@ -124,11 +130,12 @@ static cell AMX_NATIVE_CALL n_Vector_Even(AMX* amx, cell* params)
 	unsigned short int num_args = 1;
 	if (!pluginutils::CheckNumberOfArguments(amx, params, num_args))
 		return 0;
-	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vectorID)
+	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vctID)
 		return -1;
 
-	if (debugging) logprintf("%s: The size of vector %d is %d, and the return will be %s.", pluginutils::GetCurrentNativeFunctionName(amx), static_cast<int>(params[1]), vectors[static_cast<int>(params[1]) - 1].size(), vectors[static_cast<int>(params[1]) - 1].size() % 2 == 0 ? "true" : "false");
-	return vectors[static_cast<int>(params[1]) - 1].size() % 2 == 0;
+	auto size = vectors[static_cast<unsigned long int>(params[1]) - 1].size();
+	if (debugging) logprintf("%s: The size of vector %d is %d, and the return will be %s.", pluginutils::GetCurrentNativeFunctionName(amx), static_cast<int>(params[1]), size, size % 2 == 0 ? "true" : "false");
+	return size % 2 == 0;
 }
 
 /// <summary>
@@ -143,11 +150,12 @@ static cell AMX_NATIVE_CALL n_Vector_Empty(AMX* amx, cell* params)
 	unsigned short int num_args = 1;
 	if (!pluginutils::CheckNumberOfArguments(amx, params, num_args))
 		return 0;
-	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vectorID)
+	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vctID)
 		return -1;
 
-	if (debugging) logprintf("%s: The size of vector %d is %d, and the return will be %s.", pluginutils::GetCurrentNativeFunctionName(amx), static_cast<int>(params[1]), vectors[static_cast<int>(params[1]) - 1].size(), vectors[static_cast<int>(params[1]) - 1].size() == 0 ? "true" : "false");
-	return vectors[static_cast<int>(params[1]) - 1].size() == 0;
+	auto size = vectors[static_cast<unsigned long int>(params[1]) - 1].size();
+	if (debugging) logprintf("%s: The size of vector %d is %d, and the return will be %s.", pluginutils::GetCurrentNativeFunctionName(amx), static_cast<int>(params[1]), size, size == 0 ? "true" : "false");
+	return vectors[static_cast<int>(params[1]) - 1].empty();
 }
 
 /// <summary>
@@ -162,12 +170,13 @@ static cell AMX_NATIVE_CALL n_Vector_Add(AMX* amx, cell* params)
 	unsigned short int num_args = 2;
 	if (!pluginutils::CheckNumberOfArguments(amx, params, num_args))
 		return 0;
-	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vectorID)
+	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vctID)
 		return -1;
 	
 	unsigned long int vectorID = static_cast<unsigned long int>(params[1]) - 1;
 	if (debugging) logprintf("%s: Adding element to vector %d, value %d.", pluginutils::GetCurrentNativeFunctionName(amx), static_cast<int>(params[1]), static_cast<int>(params[2]));
 	vectors[vectorID].insert(static_cast<int>(params[2]));
+	copy_vectors[vectorID].push_back(static_cast<int>(params[2]));
 	return 1;
 }
 
@@ -183,7 +192,7 @@ static cell AMX_NATIVE_CALL n_Vector_Clear(AMX* amx, cell* params)
 	unsigned short int num_args = 1;
 	if (!pluginutils::CheckNumberOfArguments(amx, params, num_args))
 		return 0;
-	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vectorID)
+	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vctID)
 		return -1;
 	if (vectors[static_cast<unsigned long int>(params[1]) - 1].size() == 0) {
 		if (debugging) logprintf("%s: The vector %d it's already empty.", pluginutils::GetCurrentNativeFunctionName(amx), static_cast<unsigned long int>(params[1]) - 1);
@@ -193,6 +202,7 @@ static cell AMX_NATIVE_CALL n_Vector_Clear(AMX* amx, cell* params)
 	unsigned long int vectorID = static_cast<unsigned long int>(params[1]) - 1;
 	if (debugging) logprintf("%s: Clearing %d elements from vector %d.", pluginutils::GetCurrentNativeFunctionName(amx), vectors[vectorID].size(), vectorID + 1);
 	vectors[vectorID].clear();
+	copy_vectors[vectorID].clear();
 	return 1;
 }
 
@@ -208,7 +218,7 @@ static cell AMX_NATIVE_CALL n_Vector_Remove(AMX* amx, cell* params)
 	unsigned short int num_args = 1;
 	if (!pluginutils::CheckNumberOfArguments(amx, params, num_args))
 		return 0;
-	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vectorID)
+	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vctID)
 		return -1;
 	if (vectors[static_cast<unsigned long int>(params[1]) - 1].find(static_cast<int>(params[2])) == vectors[static_cast<unsigned long int>(params[1]) - 1].end())
 		return 0;
@@ -217,6 +227,7 @@ static cell AMX_NATIVE_CALL n_Vector_Remove(AMX* amx, cell* params)
 	int value = static_cast<int>(params[2]);
 	if (debugging) logprintf("%s: Removed element %d from vector %d.", pluginutils::GetCurrentNativeFunctionName(amx), value, vectorID + 1);
 	vectors[vectorID].erase(value);
+	copy_vectors[vectorID].erase(std::lower_bound(copy_vectors[vectorID].begin(), copy_vectors[vectorID].end(), value));
 	return 1;
 }
 
@@ -232,7 +243,7 @@ static cell AMX_NATIVE_CALL n_Vector_Delete(AMX* amx, cell* params)
 	unsigned short int num_args = 1;
 	if (!pluginutils::CheckNumberOfArguments(amx, params, num_args))
 		return 0;
-	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vectorID)
+	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vctID)
 		return -1;
 	if (static_cast<int>(params[2]) < 0 || static_cast<unsigned int>(params[2]) >= vectors[static_cast<unsigned long int>(params[1]) - 1].size())
 		return 0;
@@ -241,6 +252,7 @@ static cell AMX_NATIVE_CALL n_Vector_Delete(AMX* amx, cell* params)
 	int value = static_cast<int>(params[2]);
 	if (debugging) logprintf("%s: Removed element at index %d from vector %d.", pluginutils::GetCurrentNativeFunctionName(amx), value, vectorID + 1);
 	vectors[vectorID].erase(vectors[static_cast<unsigned long int>(params[1]) - 1].find(value));
+	copy_vectors[vectorID].erase(copy_vectors[vectorID].begin() + value);
 	return 1;
 }
 
@@ -256,15 +268,15 @@ static cell AMX_NATIVE_CALL n_Vector_Begin(AMX* amx, cell* params)
 	unsigned short int num_args = 1;
 	if (!pluginutils::CheckNumberOfArguments(amx, params, num_args))
 		return 0;
-	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vectorID)
+	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vctID)
 		return -1;
 	if (vectors[static_cast<unsigned long int>(params[1]) - 1].size() == 0)
 		return 0;
 
 	unsigned long int vectorID = static_cast<unsigned long int>(params[1]) - 1;
-	auto it = vectors[vectorID].begin();
-	if (debugging) logprintf("%s: Returning the value %d for vector %d.", pluginutils::GetCurrentNativeFunctionName(amx), *it - 1, vectorID + 1);
-	return *it - 1;
+	auto it = copy_vectors[vectorID][0] - 1;
+	if (debugging) logprintf("%s: Returning the value %d for vector %d.", pluginutils::GetCurrentNativeFunctionName(amx), it, vectorID + 1);
+	return it;
 }
 
 /// <summary>
@@ -279,15 +291,14 @@ static cell AMX_NATIVE_CALL n_Vector_End(AMX* amx, cell* params)
 	unsigned short int num_args = 1;
 	if (!pluginutils::CheckNumberOfArguments(amx, params, num_args))
 		return 0;
-	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vectorID)
+	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vctID)
 		return -1;
 	if (vectors[static_cast<unsigned long int>(params[1]) - 1].size() == 0)
 		return 0;
 
 	unsigned long int vectorID = static_cast<unsigned long int>(params[1]) - 1;
-	auto it = std::next(vectors[vectorID].begin(), vectors[vectorID].size() - 1);
-	if (debugging) logprintf("%s: Returning the value %d for vector %d.", pluginutils::GetCurrentNativeFunctionName(amx), *it + 1, vectorID + 1);
-	return *it + 1;
+	if (debugging) logprintf("%s: Returning the value %d for vector %d.", pluginutils::GetCurrentNativeFunctionName(amx), copy_vectors[vectorID][copy_vectors[vectorID].size() - 1] + 1, vectorID + 1);
+	return copy_vectors[vectorID][copy_vectors[vectorID].size() - 1] + 1;
 }
 
 /// <summary>
@@ -302,15 +313,15 @@ static cell AMX_NATIVE_CALL n_Vector_First(AMX* amx, cell* params)
 	unsigned short int num_args = 1;
 	if (!pluginutils::CheckNumberOfArguments(amx, params, num_args))
 		return 0;
-	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vectorID)
+	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vctID)
 		return -1;
 	if (vectors[static_cast<unsigned long int>(params[1]) - 1].size() == 0)
 		return 0;
 
 	unsigned long int vectorID = static_cast<unsigned long int>(params[1]) - 1;
-	auto it = vectors[vectorID].begin();
-	if (debugging) logprintf("%s: Returning the value %d for vector %d.", pluginutils::GetCurrentNativeFunctionName(amx), *it, vectorID + 1);
-	return *it;
+	auto it = copy_vectors[vectorID][0];
+	if (debugging) logprintf("%s: Returning the value %d for vector %d.", pluginutils::GetCurrentNativeFunctionName(amx), it, vectorID + 1);
+	return it;
 }
 
 /// <summary>
@@ -325,15 +336,15 @@ static cell AMX_NATIVE_CALL n_Vector_Last(AMX* amx, cell* params)
 	unsigned short int num_args = 1;
 	if (!pluginutils::CheckNumberOfArguments(amx, params, num_args))
 		return 0;
-	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vectorID)
+	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vctID)
 		return -1;
 	if (vectors[static_cast<unsigned long int>(params[1]) - 1].size() == 0)
 		return 0;
 
 	unsigned long int vectorID = static_cast<unsigned long int>(params[1]) - 1;
-	auto it = std::next(vectors[vectorID].begin(), vectors[vectorID].size() - 1);
-	if (debugging) logprintf("%s: Returning the value %d for vector %d.", pluginutils::GetCurrentNativeFunctionName(amx), *it, vectorID + 1);
-	return *it;
+	auto it = copy_vectors[vectorID][copy_vectors[vectorID].size() - 1];
+	if (debugging) logprintf("%s: Returning the value %d for vector %d.", pluginutils::GetCurrentNativeFunctionName(amx), it, vectorID + 1);
+	return it;
 }
 
 /// <summary>
@@ -348,12 +359,13 @@ static cell AMX_NATIVE_CALL n_Vector_Next(AMX* amx, cell* params)
 	unsigned short int num_args = 1;
 	if (!pluginutils::CheckNumberOfArguments(amx, params, num_args))
 		return 0;
-	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vectorID)
+	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vctID)
 		return -1;
-	if (vectors[static_cast<unsigned long int>(params[1]) - 1].size() < 2 || vectors[static_cast<unsigned long int>(params[1]) - 1].find(static_cast<int>(params[2])) == vectors[static_cast<unsigned long int>(params[1]) - 1].end())
+	if (vectors[static_cast<unsigned long int>(params[1]) - 1].size() < 2 || vectors[static_cast<unsigned long int>(params[1]) - 1].count(static_cast<int>(params[2])) == 0)
 		return -1;
 
 	unsigned long int vectorID = static_cast<unsigned long int>(params[1]) - 1;
+	//auto it = std::next(vectors[vectorID].find(static_cast<int>(params[2])));
 	auto it = vectors[vectorID].find(static_cast<int>(params[2]));
 	std::advance(it, 1);
 	if (debugging) logprintf("%s: Returning the value %d for vector %d, given value %d.", pluginutils::GetCurrentNativeFunctionName(amx), *it, vectorID + 1, static_cast<int>(params[2]));
@@ -372,12 +384,13 @@ static cell AMX_NATIVE_CALL n_Vector_Prev(AMX* amx, cell* params)
 	unsigned short int num_args = 1;
 	if (!pluginutils::CheckNumberOfArguments(amx, params, num_args))
 		return 0;
-	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vectorID)
+	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vctID)
 		return -1;
-	if (vectors[static_cast<unsigned long int>(params[1]) - 1].size() < 2 || vectors[static_cast<unsigned long int>(params[1]) - 1].find(static_cast<int>(params[2])) == vectors[static_cast<unsigned long int>(params[1]) - 1].end())
+	if (vectors[static_cast<unsigned long int>(params[1]) - 1].size() < 2 || vectors[static_cast<unsigned long int>(params[1]) - 1].count(static_cast<int>(params[2])) == 0)
 		return -1;
 
 	unsigned long int vectorID = static_cast<unsigned long int>(params[1]) - 1;
+	//auto it = std::prev(vectors[vectorID].find(static_cast<int>(params[2])));
 	auto it = vectors[vectorID].find(static_cast<int>(params[2]));
 	std::advance(it, -1);
 	if (debugging) logprintf("%s: Returning the value %d for vector %d, given value %d.", pluginutils::GetCurrentNativeFunctionName(amx), *it, vectorID + 1, static_cast<int>(params[2]));
@@ -391,24 +404,36 @@ static cell AMX_NATIVE_CALL n_Vector_Prev(AMX* amx, cell* params)
 /// <param name="params"> vectorID, value </param>
 /// <returns> Returns the prev element for the given value. If doesn't exists a prev one, it returns -1 </returns>
 
+int randInt(int n) {
+	if (n - 1 == RAND_MAX) {
+		return rand();
+	}
+	else {
+		assert(n <= RAND_MAX);
+
+		auto end = RAND_MAX / n;
+		assert(end > 0);
+		end *= n;
+		auto r = rand();
+		while (r >= end) r = rand();
+		return r % n;
+	}
+}
+
 static cell AMX_NATIVE_CALL n_Vector_Random(AMX* amx, cell* params)
 {
 	unsigned short int num_args = 1;
 	if (!pluginutils::CheckNumberOfArguments(amx, params, num_args))
 		return 0;
-	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vectorID)
+	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vctID)
 		return -1;
 	if (vectors[static_cast<unsigned long int>(params[1]) - 1].size() == 0)
 		return -1;
 
 	unsigned long int vectorID = static_cast<unsigned long int>(params[1]) - 1;
-	srand(time(NULL) % vectors[vectorID].size());
-	auto it = vectors[vectorID].begin();
-	int rnd = rand() % vectors[vectorID].size();
-	while (rnd--) 
-		++it;
-	if (debugging) logprintf("%s: Returning the value %d for vector %d.", pluginutils::GetCurrentNativeFunctionName(amx), *it, vectorID + 1);
-	return *it;
+	auto number = randInt(vectors[vectorID].size());
+	if (debugging) logprintf("%s: Returning the value %d for vector %d.", pluginutils::GetCurrentNativeFunctionName(amx), copy_vectors[vectorID][number], vectorID + 1);
+	return copy_vectors[vectorID][number];
 }
 
 /// <summary>
@@ -423,16 +448,17 @@ static cell AMX_NATIVE_CALL n_Vector_PopBack(AMX* amx, cell* params)
 	unsigned short int num_args = 1;
 	if (!pluginutils::CheckNumberOfArguments(amx, params, num_args))
 		return 0;
-	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vectorID)
+	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vctID)
 		return -1;
 	if (vectors[static_cast<unsigned long int>(params[1]) - 1].size() == 0)
 		return -1;
 
 	unsigned long int vectorID = static_cast<unsigned long int>(params[1]) - 1;
-	auto it = std::next(vectors[vectorID].begin(), vectors[vectorID].size() - 1);
-	vectors[vectorID].erase(it);
-	if (debugging) logprintf("%s: Returning the value %d for vector %d after removing it.", pluginutils::GetCurrentNativeFunctionName(amx), *it, vectorID + 1);
-	return *it;
+	int value = copy_vectors[vectorID][copy_vectors[vectorID].size() - 1];
+	vectors[vectorID].erase(vectors[vectorID].end());
+	copy_vectors[vectorID].erase(copy_vectors[vectorID].end());
+	if (debugging) logprintf("%s: Returning the value %d for vector %d after removing it.", pluginutils::GetCurrentNativeFunctionName(amx), value, vectorID + 1);
+	return value;
 }
 
 /// <summary>
@@ -447,7 +473,7 @@ static cell AMX_NATIVE_CALL n_Vector_PopFront(AMX* amx, cell* params)
 	unsigned short int num_args = 1;
 	if (!pluginutils::CheckNumberOfArguments(amx, params, num_args))
 		return 0;
-	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vectorID)
+	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vctID)
 		return -1;
 	if (vectors[static_cast<unsigned long int>(params[1]) - 1].size() == 0)
 		return -1;
@@ -455,6 +481,7 @@ static cell AMX_NATIVE_CALL n_Vector_PopFront(AMX* amx, cell* params)
 	unsigned long int vectorID = static_cast<unsigned long int>(params[1]) - 1;
 	auto it = vectors[vectorID].begin();
 	vectors[vectorID].erase(it);
+	copy_vectors[vectorID].erase(copy_vectors[vectorID].begin());
 	if (debugging) logprintf("%s: Returning the value %d for vector %d after removing it.", pluginutils::GetCurrentNativeFunctionName(amx), *it, vectorID + 1);
 	return *it;
 }
@@ -471,15 +498,15 @@ static cell AMX_NATIVE_CALL n_Vector_FindValue(AMX* amx, cell* params)
 	unsigned short int num_args = 1;
 	if (!pluginutils::CheckNumberOfArguments(amx, params, num_args))
 		return 0;
-	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vectorID)
+	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vctID)
 		return -1;
 	if (static_cast<unsigned long int>(params[2]) < 0 || static_cast<unsigned long int>(params[2]) >= vectors[static_cast<unsigned long int>(params[1]) - 1].size() || vectors[static_cast<unsigned long int>(params[1]) - 1].size() == 0)
 		return -1;
 
 	unsigned long int vectorID = static_cast<unsigned long int>(params[1]) - 1;
-	auto it = std::next(vectors[vectorID].begin(), static_cast<unsigned long int>(params[2]));
-	if (debugging) logprintf("%s: Returning the value %d for vector %d after searching at index %d.", pluginutils::GetCurrentNativeFunctionName(amx), *it, vectorID + 1, static_cast<unsigned long int>(params[2]));
-	return *it;
+	int value = copy_vectors[vectorID][static_cast<int>(params[2])];
+	if (debugging) logprintf("%s: Returning the value %d for vector %d after searching at index %d.", pluginutils::GetCurrentNativeFunctionName(amx), value, vectorID + 1, static_cast<unsigned long int>(params[2]));
+	return value;
 }
 
 /// <summary>
@@ -494,19 +521,17 @@ static cell AMX_NATIVE_CALL n_Vector_FindIndex(AMX* amx, cell* params)
 	unsigned short int num_args = 1;
 	if (!pluginutils::CheckNumberOfArguments(amx, params, num_args))
 		return 0;
-	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vectorID)
+	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vctID)
 		return -1;
-	if (vectors[static_cast<unsigned long int>(params[1]) - 1].size() == 0)
-		return -1;
-
-	unsigned long int vectorID = static_cast<unsigned long int>(params[1]) - 1;
-	auto it = vectors[vectorID].find(static_cast<int>(params[2]));
-	if (it == vectors[vectorID].end()) {
-		if (debugging) logprintf("%s: No element found with value %d in vector %d, returning -1.", pluginutils::GetCurrentNativeFunctionName(amx), static_cast<unsigned long int>(params[2]), vectorID + 1);
+	if (vectors[static_cast<unsigned long int>(params[1]) - 1].size() == 0 || vectors[static_cast<unsigned long int>(params[1]) - 1].count(static_cast<int>(params[2])) == 0) {
+		if (debugging) logprintf("%s: No element found with value %d in vector %d, returning -1.", pluginutils::GetCurrentNativeFunctionName(amx), static_cast<unsigned long int>(params[2]), static_cast<unsigned long int>(params[1]));
 		return -1;
 	}
-	if (debugging) logprintf("%s: Returning the value %d for vector %d after searching for element %d.", pluginutils::GetCurrentNativeFunctionName(amx), *it, vectorID + 1, static_cast<unsigned long int>(params[2]));
-	return *it;
+
+	unsigned long int vectorID = static_cast<unsigned long int>(params[1]) - 1;
+	int index = std::distance(copy_vectors[vectorID].begin(), std::lower_bound(copy_vectors[vectorID].begin(), copy_vectors[vectorID].end(), static_cast<int>(params[2])));
+	if (debugging) logprintf("%s: Returning the value %d for vector %d after searching for element %d.", pluginutils::GetCurrentNativeFunctionName(amx), index, vectorID + 1, static_cast<unsigned long int>(params[2]));
+	return index;
 }
 
 /// <summary>
@@ -521,7 +546,7 @@ static cell AMX_NATIVE_CALL n_Vector_ReplaceIndex(AMX* amx, cell* params)
 	unsigned short int num_args = 1;
 	if (!pluginutils::CheckNumberOfArguments(amx, params, num_args))
 		return 0;
-	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vectorID)
+	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vctID)
 		return -1;
 	if (static_cast<unsigned long int>(params[2]) < 0 || static_cast<unsigned long int>(params[2]) >= vectors[static_cast<unsigned long int>(params[1]) - 1].size() || vectors[static_cast<unsigned long int>(params[1]) - 1].size() == 0)
 		return -1;
@@ -529,10 +554,9 @@ static cell AMX_NATIVE_CALL n_Vector_ReplaceIndex(AMX* amx, cell* params)
 	unsigned long int vectorID = static_cast<unsigned long int>(params[1]) - 1;
 	int replaced = *(std::next(vectors[vectorID].begin(), static_cast<int>(params[2])));
 
-	std::vector<int> replacing_vector(vectors[vectorID].begin(), vectors[vectorID].end());
-	replacing_vector[static_cast<int>(params[2])] = static_cast<int>(params[3]);
+	copy_vectors[vectorID][static_cast<int>(params[2])] = static_cast<int>(params[3]);
 	vectors[vectorID].clear();
-	for (const int& i : replacing_vector)
+	for (const int& i : copy_vectors[vectorID])
 		vectors[vectorID].insert(i);
 	
 	if (debugging) logprintf("%s: Replacing value %d with %d in vector %d with index %d.", pluginutils::GetCurrentNativeFunctionName(amx), replaced, static_cast<unsigned long int>(params[3]), vectorID + 1, static_cast<unsigned long int>(params[2]));
@@ -551,7 +575,7 @@ static cell AMX_NATIVE_CALL n_Vector_Replace(AMX* amx, cell* params)
 	unsigned short int num_args = 1;
 	if (!pluginutils::CheckNumberOfArguments(amx, params, num_args))
 		return 0;
-	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vectorID)
+	if (static_cast<unsigned long int>(params[1]) < 1 || static_cast<unsigned long int>(params[1]) > vctID)
 		return -1;
 	if (vectors[static_cast<unsigned long int>(params[1]) - 1].size() == 0)
 		return -1;
@@ -563,10 +587,10 @@ static cell AMX_NATIVE_CALL n_Vector_Replace(AMX* amx, cell* params)
 		return -1;
 	}
 	int index = std::distance(vectors[vectorID].begin(), it);
-	std::vector<int> replacing_vector(vectors[vectorID].begin(), vectors[vectorID].end());
-	replacing_vector[index] = static_cast<int>(params[3]);
+	
+	copy_vectors[vectorID][index] = static_cast<int>(params[3]);
 	vectors[vectorID].clear();
-	for (const int& i : replacing_vector)
+	for (const int& i : copy_vectors[vectorID])
 		vectors[vectorID].insert(i);
 
 	if (debugging) logprintf("%s: Replacing value %d with %d in vector %d with index %d.", pluginutils::GetCurrentNativeFunctionName(amx), static_cast<int>(params[2]), static_cast<unsigned long int>(params[3]), vectorID + 1, index);
@@ -636,8 +660,9 @@ PLUGIN_EXPORT int PLUGIN_CALL AmxLoad(AMX *amx)
 
 PLUGIN_EXPORT int PLUGIN_CALL AmxUnload(AMX *amx)
 {
-	vectorID = 0;
+	vctID = 0;
 	vectors.clear();
+	copy_vectors.clear();
 	return AMX_ERR_NONE;
 }
 
