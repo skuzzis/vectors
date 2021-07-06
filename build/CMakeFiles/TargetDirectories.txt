@@ -1,5 +1,0 @@
-D:/vectors/build/CMakeFiles/PACKAGE.dir
-D:/vectors/build/CMakeFiles/vectors.dir
-D:/vectors/build/CMakeFiles/INSTALL.dir
-D:/vectors/build/CMakeFiles/ALL_BUILD.dir
-D:/vectors/build/CMakeFiles/ZERO_CHECK.dir
