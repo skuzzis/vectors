@@ -3,6 +3,9 @@
 Below will be an updated list of natives and functions.
 
 ```pawn
+
+foreachVector(VECTOR, variable)
+
 native Vector:Vector_Create();
 native Vector_Size(Vector:vector_name);
 native Vector_Even(Vector:vector_name);
